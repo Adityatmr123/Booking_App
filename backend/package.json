@@ -8,5 +8,18 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.9.0",
     "mongoose": "^8.7.1"
-  }
+  },
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
+
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

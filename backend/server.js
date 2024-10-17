@@ -7,6 +7,7 @@ import centerRoutes from './routes/centerRoutes.js';
 import sportRoutes from './routes/sportRoutes.js';
 import courtRoutes from './routes/courtRoutes.js';
 import cors from 'cors';
+import path from 'path';
 dotenv.config();
 
 const app = express();
@@ -23,6 +24,8 @@ mongoose
         console.error('MongoDB connection error:', err);
     });
 
+const __dirname = path.resolve();
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/bookings', bookingRoutes);
@@ -30,6 +33,14 @@ app.use('/api/centers', centerRoutes);
 app.use('/api/sports', sportRoutes);
 app.use('/api/courts', courtRoutes);
 
+
+
 app.listen(3000, () => {
     console.log("Server is running on port 3000 !! ");
+});
+
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });

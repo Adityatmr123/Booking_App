@@ -77,15 +77,11 @@ export const getAvailableBookings = async (req, res) => {
 
         // Return the available slots for all courts (including those with no available slots)
         res.status(200).json(availableSlots);
-
     } catch (error) {
         console.error("Error fetching available bookings:", error);
         res.status(500).json({ message: "Error fetching available bookings", error });
     }
 };
-
-
-
 
 
 // 2. Book a slot
