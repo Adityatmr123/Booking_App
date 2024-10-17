@@ -14,14 +14,27 @@ export const getAvailableBookings = async (req, res) => {
         // Find all courts associated with the sportId
         const courts = await Court.find({ sport: sportId });
 
+        console.log(courts);
+
         if (courts.length === 0) {
             return res.status(404).json({ message: "No courts found for this sport" });
         }
 
+        const courtIds = courts.map(court => court._id);
+        // Convert the string date to a Date object
+        const targetDate = new Date(date);
+        targetDate.setHours(0, 0, 0, 0); // Start at midnight for comparison
+
+        const nextDay = new Date(targetDate);
+        nextDay.setDate(nextDay.getDate() + 1); // Move to the next day for the upper limit
+
         // Get all bookings for those courts on the specified date
         const bookings = await Booking.find({
-            court: { $in: courts.map(court => court._id) },
-            date: new Date(date)
+            court: { $in: courtIds },
+            date: {
+                $gte: targetDate,
+                $lt: nextDay // This ensures it matches only bookings on the exact date
+            }
         }).populate('court');
 
         // Prepare a list of booked slots
@@ -58,7 +71,6 @@ export const getAvailableBookings = async (req, res) => {
 
             return {
                 courtId: court._id,
-                courtName: court.name,  // Assuming you have a 'name' field in Court model
                 availableSlots: slots,
             };
         });
